@@ -36,7 +36,12 @@ import com.horizon.bancamovil.components.fontStyles.BodyMedium
 import com.horizon.bancamovil.components.fontStyles.BodySmall
 
 @Composable
-fun BasicOpeStyle(navController: NavController, title: String = "", content: LazyListScope.() -> Unit) {
+fun BasicOpeStyle(
+    navController: NavController,
+    title: String = "",
+    bottomBar : @Composable () -> Unit = {} ,
+    content: LazyListScope.() -> Unit
+) {
     Scaffold(
         topBar = {
             BalancerTopAppBar(
@@ -46,6 +51,7 @@ fun BasicOpeStyle(navController: NavController, title: String = "", content: Laz
             )
         },
         bottomBar = {
+            bottomBar()
         },
         containerColor = MaterialTheme.colorScheme.tertiaryContainer
     ) { pad ->

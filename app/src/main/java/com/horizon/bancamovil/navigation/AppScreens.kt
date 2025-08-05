@@ -10,4 +10,10 @@ sealed class AppScreens(val route : String) {
 
     data object TransferView : AppScreens("TransferView")
 
+    data object ToCelView : AppScreens("ToCelView")
+
+    data object WithdrawView : AppScreens("WithdrawView")
+
+    data object YourKeyView : AppScreens("YourKeyView")
+
 }

@@ -297,6 +297,8 @@ fun BasicOperationBanking(navController: NavController) {
                 when(index) {
                     0 -> navController.navigate(AppScreens.DepositView.route)
                     1 -> navController.navigate(AppScreens.TransferView.route)
+                    2 -> navController.navigate(AppScreens.WithdrawView.route)
+                    3 -> navController.navigate(AppScreens.YourKeyView.route)
                 }
             }
         }

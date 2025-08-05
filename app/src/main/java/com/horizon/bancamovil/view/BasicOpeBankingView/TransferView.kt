@@ -9,6 +9,7 @@ import androidx.navigation.NavController
 import com.horizon.bancamovil.components.BasicOpeComponents.BasicOpeStyle
 import com.horizon.bancamovil.components.BasicOpeComponents.SearchAndFavoritesSection
 import com.horizon.bancamovil.components.BasicOpeComponents.TransferOptionsCard
+import com.horizon.bancamovil.navigation.AppScreens
 
 @Composable
 fun TransferViewRoute(navController: NavController) {
@@ -28,7 +29,9 @@ fun TransferViewRoute(navController: NavController) {
                 vector,
                 s,
                 commentList[index]
-            )
+            ) {
+                if(index == 0) navController.popBackStack() else navController.navigate(AppScreens.ToCelView.route)
+            }
         }
         item {
             SearchAndFavoritesSection()

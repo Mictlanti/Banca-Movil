@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowRight
 import androidx.compose.material.icons.filled.ArrowRight
@@ -23,6 +24,7 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -36,16 +38,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.Placeholder
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.horizon.bancamovil.components.HomeComponents.SectionCard
 import com.horizon.bancamovil.components.fontStyles.BodyLarge
 import com.horizon.bancamovil.components.fontStyles.BodyMedium
 import com.horizon.bancamovil.components.fontStyles.BodySmall
 
 @Composable
-fun TransferOptionsCard(vector: ImageVector, value: String, comment: String) {
+fun TransferOptionsCard(vector: ImageVector, value: String, comment: String, onClick : () -> Unit) {
     ElevatedCard(
-        onClick = {  },
+        onClick = { onClick() },
         shape = MaterialTheme.shapes.medium,
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.tertiary
@@ -107,35 +112,19 @@ fun SearchAndFavoritesSection() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TopBarSearchAndFavorite() {
 
     val value = remember { mutableStateOf("") }
 
     Row(modifier = Modifier.fillMaxWidth()) {
-        TextField(
+        TextFieldStyle(
             value.value,
-            onValueChange = { value.value = it},
-            colors = TextFieldDefaults.textFieldColors(
-                containerColor = MaterialTheme.colorScheme.tertiary,
-                cursorColor = MaterialTheme.colorScheme.tertiary,
-                focusedTextColor = MaterialTheme.colorScheme.onTertiary,
-                unfocusedTextColor = MaterialTheme.colorScheme.onTertiary,
-                focusedLabelColor = MaterialTheme.colorScheme.onTertiary.copy(alpha = .6f),
-                unfocusedLabelColor = MaterialTheme.colorScheme.onTertiary,
-                focusedIndicatorColor = MaterialTheme.colorScheme.tertiaryContainer,
-                unfocusedIndicatorColor = MaterialTheme.colorScheme.tertiaryContainer,
-                focusedLeadingIconColor = MaterialTheme.colorScheme.onTertiary.copy(alpha = .6f),
-                unfocusedLeadingIconColor = MaterialTheme.colorScheme.onTertiary
-            ),
-            leadingIcon = { Icon(Icons.Default.Search, "Search") },
-            label = { Text(text = "Buscar frecuentes") },
-            shape = MaterialTheme.shapes.extraLarge,
-            modifier = Modifier.weight(2f)
+            onValueChange = { value.value = it },
+            modifier = Modifier.weight(3f)
         )
         IconButton(
-            onClick = {  },
+            onClick = { },
             modifier = Modifier.weight(1f)
         ) {
             Row(horizontalArrangement = Arrangement.spacedBy(3.dp)) {
@@ -148,6 +137,43 @@ private fun TopBarSearchAndFavorite() {
             }
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TextFieldStyle(
+    value: String,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    label: String = "Buscar frecuentes",
+    vector: ImageVector? = Icons.Default.Search,
+    textStyle: TextStyle = LocalTextStyle.current,
+    placeholder:  @Composable() (() -> Unit)? = null,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default
+) {
+    TextField(
+        value = value,
+        onValueChange = { onValueChange(it) },
+        textStyle = textStyle,
+        colors = TextFieldDefaults.textFieldColors(
+            containerColor = MaterialTheme.colorScheme.tertiary,
+            cursorColor = MaterialTheme.colorScheme.tertiary,
+            focusedTextColor = MaterialTheme.colorScheme.onTertiary,
+            unfocusedTextColor = MaterialTheme.colorScheme.onTertiary,
+            focusedLabelColor = MaterialTheme.colorScheme.onTertiary.copy(alpha = .6f),
+            unfocusedLabelColor = MaterialTheme.colorScheme.onTertiary,
+            focusedIndicatorColor = MaterialTheme.colorScheme.tertiaryContainer,
+            unfocusedIndicatorColor = MaterialTheme.colorScheme.tertiaryContainer,
+            focusedLeadingIconColor = MaterialTheme.colorScheme.onTertiary.copy(alpha = .6f),
+            unfocusedLeadingIconColor = MaterialTheme.colorScheme.onTertiary
+        ),
+        placeholder = placeholder,
+        leadingIcon = { if(vector != null) Icon(vector, "Search") },
+        keyboardOptions = keyboardOptions,
+        label = { Text(text = label) },
+        shape = MaterialTheme.shapes.extraLarge,
+        modifier = modifier
+    )
 }
 
 @Composable
@@ -181,7 +207,7 @@ private fun Contacts(nameDestination: String, banking: String) {
                     BodySmall(banking)
                 }
             }
-            IconButton(onClick = {  }) {
+            IconButton(onClick = { }) {
                 Icon(Icons.Default.Favorite, "Add Favorite")
             }
         }

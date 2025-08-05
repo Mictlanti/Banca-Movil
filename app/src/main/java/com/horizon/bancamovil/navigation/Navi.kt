@@ -6,7 +6,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.horizon.bancamovil.view.BalanceAndHistoryViewRoute
 import com.horizon.bancamovil.view.BasicOpeBankingView.DepositViewRoute
+import com.horizon.bancamovil.view.BasicOpeBankingView.ExtraTranfer.ToCelViewOne
+import com.horizon.bancamovil.view.BasicOpeBankingView.ExtraWithdraw.WithdrawViewRoute
 import com.horizon.bancamovil.view.BasicOpeBankingView.TransferViewRoute
+import com.horizon.bancamovil.view.BasicOpeBankingView.YourKey.YourKeyRoute
 import com.horizon.bancamovil.view.WalletViewRoute
 
 @Composable
@@ -29,6 +32,18 @@ fun Navigation() {
 
         composable(AppScreens.TransferView.route) {
             TransferViewRoute(navController)
+        }
+
+        composable(AppScreens.ToCelView.route) {
+            ToCelViewOne(navController)
+        }
+
+        composable(AppScreens.WithdrawView.route) {
+            WithdrawViewRoute(navController)
+        }
+
+        composable(AppScreens.YourKeyView.route) {
+            YourKeyRoute(navController)
         }
     }
 
