@@ -1,4 +1,4 @@
-package com.horizon.bancamovil.view
+package com.horizon.bancamovil.view.mainViews
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -10,6 +10,8 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.unit.dp
@@ -22,19 +24,23 @@ import com.horizon.bancamovil.components.HomeComponents.PayServicesMenu
 import com.horizon.bancamovil.components.HomeComponents.SectionCard
 import com.horizon.bancamovil.components.HomeComponents.TopBarHome
 import com.horizon.bancamovil.components.fontStyles.BodyLarge
+import com.horizon.bancamovil.data.AuthManager
+import com.horizon.bancamovil.data.state.DataUser
 import com.horizon.bancamovil.navigation.AppScreens
+import com.horizon.bancamovil.viewmodel.BankingViewModel
 
 @Composable
-fun WalletViewRoute(navController: NavController) {
+fun WalletViewRoute(navController: NavController, viewModel: BankingViewModel, authManager: AuthManager) {
 
     val backgroundGradientColors = listOf(
         MaterialTheme.colorScheme.tertiary,
         MaterialTheme.colorScheme.background
     )
+    val accountState by viewModel.accountState.collectAsState()
 
     Scaffold(
         topBar = {
-            TopBarHome()
+            TopBarHome(navController, authManager)
         },
         bottomBar = {
             HomeBottomBar()
@@ -48,7 +54,7 @@ fun WalletViewRoute(navController: NavController) {
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
             item {
-                BalanceCard(navController)
+                BalanceCard(navController, viewModel, accountState)
             }
             item {
                 CreditCardSummary()
@@ -70,14 +76,14 @@ fun WalletViewRoute(navController: NavController) {
 }
 
 @Composable
-private fun BalanceCard(navController: NavController) {
+private fun BalanceCard(navController: NavController, viewModel: BankingViewModel, accountState: DataUser) {
     SectionCard {
         Column(
             modifier = Modifier
                 .padding(horizontal = 6.dp)
                 .fillMaxSize()
         ) {
-            AccountBalanceSection { navController.navigate(AppScreens.BalanceAndHistoryView.route) }
+            AccountBalanceSection(viewModel, accountState) { navController.navigate(AppScreens.BalanceAndHistoryView.route) }
             HorizontalDivider(
                 color = MaterialTheme.colorScheme.onBackground.copy(
                     alpha = .1f

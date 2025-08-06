@@ -8,9 +8,13 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.horizon.bancamovil.navigation.Navigation
 import com.horizon.bancamovil.ui.theme.BancaMovilTheme
+import com.horizon.bancamovil.view.LoginViews.OnboardingViewRoute
+import com.horizon.bancamovil.viewmodel.BankingViewModel
 
 class MainActivity : ComponentActivity() {
 
@@ -38,8 +42,12 @@ class MainActivity : ComponentActivity() {
 
         enableEdgeToEdge()
         setContent {
+
+            val bankingViewModel : BankingViewModel = viewModel()
+            val context = LocalContext.current
+
             BancaMovilTheme {
-                Navigation()
+                Navigation(bankingViewModel, context)
             }
         }
     }

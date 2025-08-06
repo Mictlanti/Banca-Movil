@@ -34,18 +34,21 @@ import com.horizon.bancamovil.components.BalancerTopAppBar
 import com.horizon.bancamovil.components.fontStyles.BodyLarge
 import com.horizon.bancamovil.components.fontStyles.BodyMedium
 import com.horizon.bancamovil.components.fontStyles.BodySmall
+import com.horizon.bancamovil.viewmodel.BankingViewModel
 
 @Composable
 fun BasicOpeStyle(
     navController: NavController,
+    viewModel: BankingViewModel,
     title: String = "",
-    bottomBar : @Composable () -> Unit = {} ,
+    bottomBar: @Composable () -> Unit = {},
     content: LazyListScope.() -> Unit
 ) {
     Scaffold(
         topBar = {
             BalancerTopAppBar(
                 navController,
+                viewModel,
                 title = title,
                 color = MaterialTheme.colorScheme.tertiaryContainer
             )
@@ -62,7 +65,7 @@ fun BasicOpeStyle(
                 .padding(10.dp),
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
-           content()
+            content()
         }
     }
 }
@@ -111,11 +114,17 @@ fun DataAccount() {
 }
 
 @Composable
-fun DepositWithCard(label: String, comments: String, onClick: () -> Unit) {
+fun DepositWithCard(
+    label: String,
+    comments: String,
+    colorCard: Color = MaterialTheme.colorScheme.tertiaryContainer,
+    colorText: Color = MaterialTheme.colorScheme.onTertiaryContainer,
+    onClick: () -> Unit
+) {
     ElevatedCard(
         onClick = { onClick() },
         shape = MaterialTheme.shapes.small,
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer)
+        colors = CardDefaults.cardColors(containerColor = colorCard)
     ) {
         Row(
             modifier = Modifier
@@ -125,14 +134,17 @@ fun DepositWithCard(label: String, comments: String, onClick: () -> Unit) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column {
-                BodyMedium(label, color = MaterialTheme.colorScheme.onTertiaryContainer)
+                BodyMedium(label, color = colorText)
                 Spacer(Modifier.height(2.dp))
-                if(comments.isNotBlank()) BodySmall(comments, color = MaterialTheme.colorScheme.onTertiaryContainer.copy(alpha = .3f))
+                if (comments.isNotBlank()) BodySmall(
+                    comments,
+                    color = MaterialTheme.colorScheme.onTertiaryContainer.copy(alpha = .3f)
+                )
             }
             Icon(
                 Icons.AutoMirrored.Filled.ArrowRight,
                 label,
-                tint = MaterialTheme.colorScheme.onTertiaryContainer
+                tint = colorText
             )
         }
     }

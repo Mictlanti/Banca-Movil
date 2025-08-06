@@ -1,4 +1,4 @@
-package com.horizon.bancamovil.view.BasicOpeBankingView.ExtraTranfer
+package com.horizon.bancamovil.view.BasicOpeBankingView.extraTranfer
 
 import androidx.compose.runtime.Composable
 

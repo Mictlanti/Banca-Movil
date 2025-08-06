@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.google.gms.google.services)
 }
 
 android {
@@ -9,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "com.horizon.bancamovil"
-        minSdk = 22
+        minSdk = 23
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -78,4 +79,22 @@ dependencies {
 
     //Icons
     implementation(libs.material.icons.extended)
+
+    //firebase
+    implementation(platform(libs.firebase.bom.v3273))
+    implementation(libs.google.firebase.auth.ktx)
+    implementation(libs.play.services.auth)
+    implementation(libs.googleid)
+    //implementation(libs.firebase.auth.ktx)
+    //implementation(libs.google.services)
+    //implementation(libs.firebase.auth)
+
+
+    //firebase-auth = { module = "com.google.firebase:firebase-auth", version.ref = "firebaseAuth" }
+    //firebase-auth-ktx = { module = "com.google.firebase:firebase-auth-ktx", version.ref = "firebaseAuthKtx" }
+    //google-services = { module = "com.google.gms:google-services", version.ref = "googleServices" }
+
+
+    //coil
+    implementation(libs.coil.compose)
 }

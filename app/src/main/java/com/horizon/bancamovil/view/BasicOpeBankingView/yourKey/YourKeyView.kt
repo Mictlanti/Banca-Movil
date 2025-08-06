@@ -1,4 +1,4 @@
-package com.horizon.bancamovil.view.BasicOpeBankingView.YourKey
+package com.horizon.bancamovil.view.BasicOpeBankingView.yourKey
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -15,6 +15,7 @@ import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,17 +28,20 @@ import com.horizon.bancamovil.components.BasicOpeComponents.SharedDataUserKey
 import com.horizon.bancamovil.components.HomeComponents.SectionCard
 import com.horizon.bancamovil.components.fontStyles.BodyLarge
 import com.horizon.bancamovil.components.fontStyles.HeadLineLarge
+import com.horizon.bancamovil.data.AuthManager
+import com.horizon.bancamovil.viewmodel.BankingViewModel
 import kotlinx.coroutines.launch
 
 @Composable
-fun YourKeyRoute(navController: NavController) {
+fun YourKeyRoute(navController: NavController, viewModel: BankingViewModel, authManager: AuthManager) {
 
     val pagerState = rememberPagerState(pageCount = { 2 })
     val scope = rememberCoroutineScope()
     val nextPage = (pagerState.currentPage + 1).coerceIn(0, pagerState.pageCount - 1)
     val lastPage = (pagerState.currentPage - 1).coerceIn(0, pagerState.pageCount - 1)
+    val userData = viewModel.accountState.collectAsState()
 
-    BasicOpeStyle(navController) {
+    BasicOpeStyle(navController, viewModel) {
         item {
             HeadLineLarge("Comporte tus datos y recibe el dinero")
         }
@@ -62,24 +66,27 @@ fun YourKeyRoute(navController: NavController) {
         }
 
         item {
-            HorizontalOptionsData(pagerState)
+            HorizontalOptionsData(pagerState, authManager)
         }
     }
 }
 
 
 @Composable
-fun HorizontalOptionsData(pagerState: PagerState) {
+fun HorizontalOptionsData(pagerState: PagerState, authManager: AuthManager) {
+
+    val nameUser= authManager.getCurrentUser()?.displayName ?: ""
+    val emailUser = authManager.getCurrentUser()?.email ?: ""
 
     val listDataNational = listOf(
         "Clave" to "55784851459862",
-        "Beneficiario" to "Lolita Cortéz Casanova Elisey",
-        "Instituto" to "Banco de México"
+        "Beneficiario" to nameUser,
+        "Instituto" to "Mimatika"
     )
     val listDataForeign = listOf(
-        "Beneficiario" to "Lolita Cortéz Casanova Elisey",
+        "Beneficiario" to nameUser,
         "Celular" to "5248751543",
-        "e-mail" to "missLoli.casanova@machupichu.com",
+        "e-mail" to emailUser,
         "Ciudad / Estado" to "XochiYork, Mexico City"
     )
 

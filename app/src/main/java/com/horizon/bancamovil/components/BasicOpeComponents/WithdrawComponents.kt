@@ -1,5 +1,7 @@
 package com.horizon.bancamovil.components.BasicOpeComponents
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -22,57 +24,60 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Switch
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.horizon.bancamovil.components.HomeComponents.SectionCard
 import com.horizon.bancamovil.components.fontStyles.BodyLarge
 import com.horizon.bancamovil.components.fontStyles.BodyMedium
 import com.horizon.bancamovil.components.fontStyles.BodySmall
-import com.horizon.bancamovil.components.formatCurrency
+import com.horizon.bancamovil.data.model.DepositSite
+import com.horizon.bancamovil.data.state.DataUser
+import com.horizon.bancamovil.data.state.DepositState
+import com.horizon.bancamovil.events.BankingEvents
+import com.horizon.bancamovil.navigation.AppScreens
+import com.horizon.bancamovil.viewmodel.BankingViewModel
+import kotlinx.coroutines.launch
 
 @Composable
-fun HiddenNumberInput() {
+fun HiddenNumberInput(
+    state: DepositState,
+    viewModel: BankingViewModel,
+    accountState: DataUser,
+    color: Color,
+    showMoneyAvailable: Boolean = true,
+    message: String? = null,
+    maxDeposit: Boolean = true
+) {
 
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusRequester = remember { FocusRequester() }
 
-    var rawText by remember { mutableStateOf(TextFieldValue("")) }
-    var formattedText by remember { mutableStateOf("") }
-    val numericValue = rawText.text.toDoubleOrNull()
-    val color = if (numericValue != null && numericValue <= 2000.0 || rawText.text.isBlank()) {
-        MaterialTheme.colorScheme.onTertiary
-    } else {
-        MaterialTheme.colorScheme.errorContainer
+    LaunchedEffect(Unit) {
+        viewModel.reformatValues()
     }
 
 
     Column(modifier = Modifier.padding(16.dp)) {
 
         BasicTextField(
-            value = rawText,
+            value = state.rawText,
             onValueChange = {
-                rawText = it
-                val numeric = it.text.toDoubleOrNull()
-                formattedText = if (numeric != null) {
-                    formatCurrency(numeric)
-                } else {
-                    ""
-                }
+                viewModel.events(BankingEvents.OnValueChange(it))
             },
             keyboardOptions = KeyboardOptions.Default.copy(
                 keyboardType = KeyboardType.Number
@@ -99,17 +104,17 @@ fun HiddenNumberInput() {
                 verticalArrangement = Arrangement.Center
             ) {
                 BodyLarge(
-                    "$ ${formattedText.ifEmpty { "0" }}",
+                    "$ ${viewModel.formatText().ifEmpty { "0" }}",
                     color = color,
                     fontSize = 40.sp
                 )
-                BodySmall(
-                    "$ 31,283,052.75 disponibles",
+                if (showMoneyAvailable) BodySmall(
+                    message ?: "$ ${viewModel.formatCurrency(accountState.valueAccount)}",
                     color = MaterialTheme.colorScheme.onTertiary
                 )
             }
         }
-        BodySmall("*Toma en cuenta el monto máximo del sitio")
+        if (maxDeposit) BodySmall("*Toma en cuenta el monto máximo del sitio")
     }
 }
 
@@ -119,9 +124,36 @@ fun CardSkeleton(
     amount: String,
     imageVector: Int,
     cost: String = "Gratis",
-    free: Boolean = true
+    free: Boolean = true,
+    index: Int,
+    state: DepositState,
+    viewModel: BankingViewModel,
+    onClick: () -> Unit
 ) {
-    SectionCard(3f) {
+
+    val counting = remember { mutableStateOf(0) }
+
+    LaunchedEffect(counting.value) {
+        if (counting.value == 1) viewModel.events(BankingEvents.AvailableSitesDeposit(null))
+    }
+
+    DepositInCard(
+        index = index,
+        state = state,
+        counting = counting.value,
+        onClick = {
+            if (state.depositInSites == index) {
+                if (counting.value == 1) {
+                    counting.value = 0
+                } else {
+                    counting.value++
+                }
+            } else {
+                counting.value = 0
+            }
+            onClick()
+        }
+    ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Start,
@@ -151,7 +183,45 @@ fun CardSkeleton(
 }
 
 @Composable
-fun WithDrawBottomAppBar(switchSt: Boolean, switchNd: Boolean) {
+private fun DepositInCard(
+    aspectRatio: Float = 3f,
+    index: Int,
+    state: DepositState,
+    counting: Int,
+    onClick: () -> Unit,
+    content: @Composable () -> Unit
+) {
+    ElevatedCard(
+        onClick = { onClick() },
+        shape = MaterialTheme.shapes.medium,
+        colors = CardDefaults.cardColors(
+            containerColor = if (index == state.depositInSites && counting != 1) MaterialTheme.colorScheme.secondaryContainer else MaterialTheme.colorScheme.tertiaryContainer
+        ),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 8.dp
+        ),
+        modifier = Modifier
+            .padding(horizontal = 10.dp)
+            .aspectRatio(aspectRatio)
+    ) {
+        content()
+    }
+}
+
+@Composable
+fun WithDrawBottomAppBar(
+    state: DepositState,
+    selectedSize: DepositSite?,
+    onClickContinue: () -> Unit
+) {
+
+//    val nullables = if(state.rawText.isEmpty()) 0.0 else state.rawText.toDouble()
+//    val condition = nullables !in 0.0..selectedSize?.maxAmount!!
+    val amount = state.rawText.toDoubleOrNull() ?: 0.0
+    val condition = selectedSize?.maxAmount?.let { amount in 0.0..it } ?: false
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+
     BottomAppBar(
         containerColor = MaterialTheme.colorScheme.tertiaryContainer
     ) {
@@ -159,33 +229,47 @@ fun WithDrawBottomAppBar(switchSt: Boolean, switchNd: Boolean) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 5.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly
+            horizontalArrangement = Arrangement.spacedBy(5.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.weight(1f)
             ) {
-                SwitchCard(switchSt)
+                SwitchCard(state.rawText.isNotBlank())
                 Spacer(Modifier.width(10.dp))
-                SwitchCard(switchNd)
+                SwitchCard(state.depositInSites != null)
             }
             Button(
                 onClick = {
-
+                    if(!condition) {
+                        scope.launch {
+                            Toast.makeText(context, "Error", Toast.LENGTH_LONG).show()
+                        }
+                    } else {
+                        onClickContinue()
+                    }
                 },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = if (switchSt && switchNd) MaterialTheme.colorScheme.secondaryContainer else Color.Gray.copy(
-                        alpha = .5f
-                    )
+                    containerColor = if (
+                        condition && state.depositInSites != null
+                        ) {
+                        MaterialTheme.colorScheme.secondaryContainer
+                    }else {
+                        Color.Gray.copy(
+                            alpha = .5f
+                        )
+                    }
                 ),
-                modifier = Modifier.weight(3f)
+                modifier = Modifier.weight(4f)
             ) {
                 BodyMedium(
                     "Continuar",
-                    color = if (switchSt && switchNd) MaterialTheme.colorScheme.onSecondaryContainer else Color.Gray.copy(
+                    color = if (condition && state.depositInSites != null) MaterialTheme.colorScheme.onSecondaryContainer else Color.Gray.copy(
                         alpha = .5f
                     )
                 )
+                Log.d("Withdraw", "value: ${state.depositInSites}")
             }
         }
     }
@@ -199,7 +283,7 @@ private fun SwitchCard(available: Boolean) {
             containerColor = if (available) Color.Green else Color.Gray.copy(alpha = .5f)
         ),
         modifier = Modifier
-            .size(30.dp)
+            .size(18.dp)
             .border(
                 2.dp,
                 MaterialTheme.colorScheme.tertiary.copy(alpha = if (available) 1f else 0f),

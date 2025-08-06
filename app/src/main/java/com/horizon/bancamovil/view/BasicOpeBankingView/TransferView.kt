@@ -10,9 +10,10 @@ import com.horizon.bancamovil.components.BasicOpeComponents.BasicOpeStyle
 import com.horizon.bancamovil.components.BasicOpeComponents.SearchAndFavoritesSection
 import com.horizon.bancamovil.components.BasicOpeComponents.TransferOptionsCard
 import com.horizon.bancamovil.navigation.AppScreens
+import com.horizon.bancamovil.viewmodel.BankingViewModel
 
 @Composable
-fun TransferViewRoute(navController: NavController) {
+fun TransferViewRoute(navController: NavController, viewModel: BankingViewModel) {
 
     val optionsToTransfer = listOf(
         Icons.Default.FoodBank to "A una clave o tarjeta",
@@ -23,7 +24,7 @@ fun TransferViewRoute(navController: NavController) {
         "Mercado Wallete o Dimo"
     )
 
-    BasicOpeStyle(navController, "Tranferir Biyuyo") {
+    BasicOpeStyle(navController, viewModel,"Tranferir Biyuyo") {
         itemsIndexed(optionsToTransfer) { index, (vector, s) ->
             TransferOptionsCard(
                 vector,

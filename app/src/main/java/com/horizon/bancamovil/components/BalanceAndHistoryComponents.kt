@@ -36,13 +36,13 @@ import com.horizon.bancamovil.components.fontStyles.BodyMedium
 import com.horizon.bancamovil.components.fontStyles.BodySmall
 import com.horizon.bancamovil.components.fontStyles.HeadLineLarge
 import com.horizon.bancamovil.ui.theme.abelFont
-import java.text.NumberFormat
-import java.util.Locale
+import com.horizon.bancamovil.viewmodel.BankingViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BalancerTopAppBar(
     navController: NavController,
+    viewModel: BankingViewModel,
     title: String = "Estadísticas",
     color: Color = MaterialTheme.colorScheme.tertiary
 ) {
@@ -52,7 +52,10 @@ fun BalancerTopAppBar(
         },
         navigationIcon = {
             IconButton(
-                onClick = { navController.popBackStack() }
+                onClick = {
+                    navController.popBackStack()
+                    viewModel.reformatValues()
+                }
             ) {
                 Icon(Icons.Default.ArrowBackIosNew, "Back Navigation")
             }
@@ -85,7 +88,7 @@ fun MoneyAvailable() {
 }
 
 @Composable
-fun HistoryMovements() {
+fun HistoryMovements(viewModel: BankingViewModel) {
 
     val listExampleCompany = listOf(
         "Google",
@@ -117,7 +120,8 @@ fun HistoryMovements() {
             listExampleCompany[index],
             s,
             listExampleAmount[index],
-            listExampleDate[index]
+            listExampleDate[index],
+            viewModel
         )
     }
 }
@@ -127,7 +131,8 @@ fun ContainerMovements(
     company: String,
     transaction: String,
     amount: Double,
-    dateTransaction: String
+    dateTransaction: String,
+    viewModel: BankingViewModel
 ) {
 
     Card(
@@ -146,7 +151,7 @@ fun ContainerMovements(
             Spacer(Modifier.width(7.dp))
             TransactionContainer(company, transaction, modifier = Modifier.weight(2f))
             Spacer(Modifier.width(7.dp))
-            TransactionAmount(amount, dateTransaction, modifier = Modifier.weight(1f))
+            TransactionAmount(viewModel, amount, dateTransaction, modifier = Modifier.weight(1f))
         }
     }
 }
@@ -191,20 +196,13 @@ private fun TransactionContainer(
 }
 
 @Composable
-fun TransactionAmount(amount: Double, dateTransaction: String, modifier: Modifier = Modifier) {
+fun TransactionAmount(viewModel: BankingViewModel, amount: Double, dateTransaction: String, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier.wrapContentSize(),
         horizontalAlignment = Alignment.End,
         verticalArrangement = Arrangement.spacedBy(5.dp)
     ) {
-        BodyMedium("$ ${formatCurrency(amount)}")
+        BodyMedium("$ ${viewModel.formatCurrency(amount)}")
         BodySmall(dateTransaction)
     }
-}
-
-fun formatCurrency(amount: Double): String {
-    val formatter = NumberFormat.getNumberInstance(Locale.US)
-    formatter.minimumFractionDigits = 0
-    formatter.maximumFractionDigits = 0
-    return formatter.format(amount)
 }

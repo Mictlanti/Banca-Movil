@@ -29,9 +29,10 @@ import com.horizon.bancamovil.components.fontStyles.BodyLarge
 import com.horizon.bancamovil.components.fontStyles.BodyMedium
 import com.horizon.bancamovil.components.fontStyles.HeadLineLarge
 import com.horizon.bancamovil.ui.theme.abelFont
+import com.horizon.bancamovil.viewmodel.BankingViewModel
 
 @Composable
-fun BalanceAndHistoryViewRoute(navController: NavController) {
+fun BalanceAndHistoryViewRoute(navController: NavController, viewModel: BankingViewModel) {
 
     val backgroundGradientColors = listOf(
         MaterialTheme.colorScheme.tertiary,
@@ -40,7 +41,7 @@ fun BalanceAndHistoryViewRoute(navController: NavController) {
 
     Scaffold(
         topBar = {
-            BalancerTopAppBar(navController)
+            BalancerTopAppBar(navController, viewModel)
         },
         modifier = Modifier.fillMaxSize()
     ) { pad ->
@@ -52,7 +53,7 @@ fun BalanceAndHistoryViewRoute(navController: NavController) {
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             item {
-                SectionCardHeader()
+                SectionCardHeader(viewModel)
             }
             item {
                 SectionCard(1f) {
@@ -74,7 +75,7 @@ fun BalanceAndHistoryViewRoute(navController: NavController) {
 }
 
 @Composable
-private fun SectionCardHeader() {
+private fun SectionCardHeader(viewModel: BankingViewModel) {
     SectionCard(.7f) {
         Column(
             modifier = Modifier
@@ -83,7 +84,7 @@ private fun SectionCardHeader() {
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
             MoneyAvailable()
-            HistoryMovements()
+            HistoryMovements(viewModel)
         }
     }
 }
