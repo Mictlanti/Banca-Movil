@@ -1,4 +1,4 @@
-package com.horizon.bancamovil.view.BasicOpeBankingView
+package com.horizon.bancamovil.view.BasicOpeBankingView.depositView
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -12,9 +12,11 @@ import com.horizon.bancamovil.components.BasicOpeComponents.BasicOpeStyle
 import com.horizon.bancamovil.components.BasicOpeComponents.DataAccount
 import com.horizon.bancamovil.components.BasicOpeComponents.DepositWithCard
 import com.horizon.bancamovil.components.fontStyles.HeadLineLarge
+import com.horizon.bancamovil.navigation.AppScreens
+import com.horizon.bancamovil.viewmodel.BankingViewModel
 
 @Composable
-fun DepositViewRoute(navController: NavController) {
+fun DepositViewRoute(navController: NavController, viewModel: BankingViewModel) {
 
     val depositWith = listOf(
         "Con efectivo en tiendas y bancos",
@@ -23,7 +25,7 @@ fun DepositViewRoute(navController: NavController) {
         "Con envíos de dinero del extranjero"
     )
 
-    BasicOpeStyle(navController) {
+    BasicOpeStyle(navController, viewModel) {
         item {
             HeadLineLarge(
                 "Datos de la cuenta",
@@ -43,9 +45,13 @@ fun DepositViewRoute(navController: NavController) {
         itemsIndexed(depositWith) { index, s ->
             DepositWithCard(
                 s,
-                if (index == 2) "Trae dinero de otra cuenta todos los meses" else ""
+                if (index == 1) "Trae dinero de otra cuenta todos los meses" else ""
             ) {
-
+                when(index) {
+                    0 -> navController.navigate(AppScreens.DepositInView.route)
+                    1 -> navController.navigate(AppScreens.UnavailableView.route)
+                    2 -> navController.navigate(AppScreens.DepositInOtherBankView.route)
+                }
             }
         }
     }

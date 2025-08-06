@@ -7,6 +7,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 import com.horizon.bancamovil.ui.theme.abelFont
@@ -20,7 +22,8 @@ fun HeadLineLarge(
     fontWeight: FontWeight = FontWeight.W900,
     letterSpacing: TextUnit = 2.sp,
     fontFamily: FontFamily = abelFont,
-    color: Color = MaterialTheme.colorScheme.onBackground
+    textAlign:  TextAlign? = null,
+    color: Color = MaterialTheme.colorScheme.onBackground,
 ) {
     Text(
         text,
@@ -29,6 +32,7 @@ fun HeadLineLarge(
         letterSpacing = letterSpacing,
         fontFamily = fontFamily,
         color = color,
+        textAlign = textAlign,
         modifier = modifier
     )
 }
@@ -61,6 +65,7 @@ fun BodyMedium(
     fontWeight: FontWeight = FontWeight.W400,
     letterSpacing: TextUnit = 1.sp,
     color: Color = MaterialTheme.colorScheme.onBackground,
+    textDecoration: TextDecoration? = null,
     fontFamily: FontFamily = robotoFont
 ) {
     Text(
@@ -70,6 +75,7 @@ fun BodyMedium(
         letterSpacing = letterSpacing,
         fontFamily = fontFamily,
         color = color,
+        textDecoration = textDecoration,
         modifier = modifier
     )
 }

@@ -1,18 +1,21 @@
-package com.horizon.bancamovil.view.BasicOpeBankingView
+package com.horizon.bancamovil.view.BasicOpeBankingView.extraTranfer
 
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FoodBank
 import androidx.compose.material.icons.filled.PersonPin
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.navigation.NavController
 import com.horizon.bancamovil.components.BasicOpeComponents.BasicOpeStyle
 import com.horizon.bancamovil.components.BasicOpeComponents.SearchAndFavoritesSection
 import com.horizon.bancamovil.components.BasicOpeComponents.TransferOptionsCard
 import com.horizon.bancamovil.navigation.AppScreens
+import com.horizon.bancamovil.viewmodel.BankingViewModel
 
 @Composable
-fun TransferViewRoute(navController: NavController) {
+fun TransferViewRoute(navController: NavController, viewModel: BankingViewModel) {
 
     val optionsToTransfer = listOf(
         Icons.Default.FoodBank to "A una clave o tarjeta",
@@ -22,19 +25,22 @@ fun TransferViewRoute(navController: NavController) {
         "Cuentas bancarias o digitales",
         "Mercado Wallete o Dimo"
     )
+    val state by viewModel.operationState.collectAsState()
 
-    BasicOpeStyle(navController, "Tranferir Biyuyo") {
+    BasicOpeStyle(navController, viewModel, "Tranferir Biyuyo") {
         itemsIndexed(optionsToTransfer) { index, (vector, s) ->
             TransferOptionsCard(
                 vector,
                 s,
                 commentList[index]
             ) {
-                if(index == 0) navController.popBackStack() else navController.navigate(AppScreens.ToCelView.route)
+                if (index == 0) navController.navigate(AppScreens.TransferKeyOrTarget.route) else navController.navigate(
+                    AppScreens.ToCelView.route
+                )
             }
         }
         item {
-            SearchAndFavoritesSection()
+            SearchAndFavoritesSection(state)
         }
     }
 }

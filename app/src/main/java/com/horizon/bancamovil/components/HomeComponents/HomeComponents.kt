@@ -67,6 +67,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -74,17 +75,23 @@ import com.horizon.bancamovil.components.fontStyles.BodyLarge
 import com.horizon.bancamovil.components.fontStyles.BodyMedium
 import com.horizon.bancamovil.components.fontStyles.BodySmall
 import com.horizon.bancamovil.components.fontStyles.HeadLineLarge
+import com.horizon.bancamovil.data.AuthManager
+import com.horizon.bancamovil.data.state.DataUser
 import com.horizon.bancamovil.navigation.AppScreens
 import com.horizon.bancamovil.ui.theme.abelFont
 import com.horizon.bancamovil.ui.theme.robotoFont
+import com.horizon.bancamovil.viewmodel.BankingViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBarHome() {
+fun TopBarHome(navController: NavController, authManager: AuthManager) {
+
+    val user = authManager.getCurrentUser()?.displayName ?: ""
+
     TopAppBar(
         title = {
-            Row(modifier = Modifier.clickable { }) {
-                HeadLineLarge("Hola, Lolita", color = MaterialTheme.colorScheme.onTertiary)
+            Row(modifier = Modifier.clickable { navController.navigate(AppScreens.ProfileView.route) }) {
+                HeadLineLarge("Hola, $user", color = MaterialTheme.colorScheme.onTertiary)
                 Icon(
                     Icons.AutoMirrored.Filled.ArrowRight,
                     "Go to Profile",
@@ -175,7 +182,7 @@ private fun BottomNavItem(
             Icon(
                 vector,
                 null,
-                tint = if(index == 2) MaterialTheme.colorScheme.onTertiaryContainer else MaterialTheme.colorScheme.onBackground,
+                tint = if (index == 2) MaterialTheme.colorScheme.onTertiaryContainer else MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier
                     .size(if (index == 2) 53.dp else 30.dp)
                     .padding(if (index == 2) 7.dp else 0.dp)
@@ -186,15 +193,21 @@ private fun BottomNavItem(
 }
 
 @Composable
-fun SectionCard(aspectRatio: Float = 1f, content: @Composable() (ColumnScope.() -> Unit)) {
+fun SectionCard(
+    aspectRatio: Float = 1f,
+    colorCard: Color = MaterialTheme.colorScheme.tertiaryContainer,
+    modifier: Modifier = Modifier,
+    padding: Dp = 10.dp,
+    content: @Composable() (ColumnScope.() -> Unit)
+) {
     ElevatedCard(
         shape = MaterialTheme.shapes.medium,
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer),
+        colors = CardDefaults.cardColors(containerColor = colorCard),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 8.dp
         ),
-        modifier = Modifier
-            .padding(horizontal = 10.dp)
+        modifier = modifier
+            .padding(horizontal = padding)
             .aspectRatio(aspectRatio)
     ) {
         content()
@@ -202,7 +215,11 @@ fun SectionCard(aspectRatio: Float = 1f, content: @Composable() (ColumnScope.() 
 }
 
 @Composable
-fun AccountBalanceSection(onClick: () -> Unit) {
+fun AccountBalanceSection(
+    viewModel: BankingViewModel,
+    accountState: DataUser,
+    onClick: () -> Unit
+) {
 
     var dismissMoney by remember { mutableStateOf(true) }
 
@@ -225,7 +242,10 @@ fun AccountBalanceSection(onClick: () -> Unit) {
                 color = MaterialTheme.colorScheme.onBackground.copy(alpha = .5f)
             )
             Row(verticalAlignment = Alignment.CenterVertically) {
-                HeadLineLarge("$" + if (dismissMoney) "31,283,052" else "***")
+                HeadLineLarge(
+                    "$" +
+                            if (dismissMoney) viewModel.formatCurrency(accountState.valueAccount) else "***"
+                )
                 BodyMedium(
                     text = if (dismissMoney) ".74" else "",
                     fontWeight = FontWeight.W800,
@@ -294,7 +314,7 @@ fun BasicOperationBanking(navController: NavController) {
                 iconsOpe[index],
                 s
             ) {
-                when(index) {
+                when (index) {
                     0 -> navController.navigate(AppScreens.DepositView.route)
                     1 -> navController.navigate(AppScreens.TransferView.route)
                     2 -> navController.navigate(AppScreens.WithdrawView.route)

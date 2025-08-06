@@ -1,4 +1,4 @@
-package com.horizon.bancamovil.view.BasicOpeBankingView.YourKey
+package com.horizon.bancamovil.view.BasicOpeBankingView.yourKey
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -15,6 +15,8 @@ import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,18 +28,27 @@ import com.horizon.bancamovil.components.BasicOpeComponents.SharedDataUserForeig
 import com.horizon.bancamovil.components.BasicOpeComponents.SharedDataUserKey
 import com.horizon.bancamovil.components.HomeComponents.SectionCard
 import com.horizon.bancamovil.components.fontStyles.BodyLarge
+import com.horizon.bancamovil.components.fontStyles.BodyMedium
 import com.horizon.bancamovil.components.fontStyles.HeadLineLarge
+import com.horizon.bancamovil.data.AuthManager
+import com.horizon.bancamovil.data.state.DataUser
+import com.horizon.bancamovil.viewmodel.BankingViewModel
 import kotlinx.coroutines.launch
 
 @Composable
-fun YourKeyRoute(navController: NavController) {
+fun YourKeyRoute(
+    navController: NavController,
+    viewModel: BankingViewModel,
+    authManager: AuthManager
+) {
 
     val pagerState = rememberPagerState(pageCount = { 2 })
     val scope = rememberCoroutineScope()
     val nextPage = (pagerState.currentPage + 1).coerceIn(0, pagerState.pageCount - 1)
     val lastPage = (pagerState.currentPage - 1).coerceIn(0, pagerState.pageCount - 1)
+    val accountState by viewModel.accountState.collectAsState()
 
-    BasicOpeStyle(navController) {
+    BasicOpeStyle(navController, viewModel) {
         item {
             HeadLineLarge("Comporte tus datos y recibe el dinero")
         }
@@ -61,33 +72,54 @@ fun YourKeyRoute(navController: NavController) {
             }
         }
 
+        if (accountState.phoneNumber == null && accountState.neighborhood == null && accountState.district == null && accountState.name == null) {
+            item {
+                BodyMedium(
+                    "Datos incompletos",
+                    color = MaterialTheme.colorScheme.error
+                )
+            }
+        }
+
         item {
-            HorizontalOptionsData(pagerState)
+            HorizontalOptionsData(pagerState, authManager, accountState)
         }
     }
 }
 
 
 @Composable
-fun HorizontalOptionsData(pagerState: PagerState) {
+fun HorizontalOptionsData(
+    pagerState: PagerState,
+    authManager: AuthManager,
+    accountState: DataUser
+) {
+
+    val nameUser = authManager.getCurrentUser()?.displayName ?: "-"
+    val emailUser = authManager.getCurrentUser()?.email ?: "-"
+    val address = "${accountState.district ?: "-"} / ${accountState.neighborhood ?: "-"}"
+    val keyUser =
+        if (accountState.phoneNumber != null && accountState.district != null && accountState.neighborhood != null && accountState.name != null) {
+            "55874526598642"
+        } else "-"
 
     val listDataNational = listOf(
-        "Clave" to "55784851459862",
-        "Beneficiario" to "Lolita Cortéz Casanova Elisey",
-        "Instituto" to "Banco de México"
+        "Clave" to keyUser,
+        "Beneficiario" to nameUser,
+        "Instituto" to "Mimatika"
     )
     val listDataForeign = listOf(
-        "Beneficiario" to "Lolita Cortéz Casanova Elisey",
-        "Celular" to "5248751543",
-        "e-mail" to "missLoli.casanova@machupichu.com",
-        "Ciudad / Estado" to "XochiYork, Mexico City"
+        "Beneficiario" to nameUser,
+        "Celular" to (accountState.phoneNumber ?: "-").toString(),
+        "e-mail" to emailUser,
+        "Ciudad / Estado" to address
     )
 
     HorizontalPager(
         state = pagerState,
         modifier = Modifier.fillMaxWidth()
     ) { page ->
-        when(page) {
+        when (page) {
             0 -> {
                 Column(
                     modifier = Modifier.fillMaxSize(),
@@ -101,8 +133,11 @@ fun HorizontalOptionsData(pagerState: PagerState) {
                             modifier = Modifier
                                 .padding(10.dp)
                                 .fillMaxSize()
-                                .clickable {  },
-                            horizontalArrangement = Arrangement.spacedBy(20.dp, Alignment.CenterHorizontally),
+                                .clickable { },
+                            horizontalArrangement = Arrangement.spacedBy(
+                                20.dp,
+                                Alignment.CenterHorizontally
+                            ),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Icon(
@@ -129,8 +164,11 @@ fun HorizontalOptionsData(pagerState: PagerState) {
                             modifier = Modifier
                                 .padding(10.dp)
                                 .fillMaxSize()
-                                .clickable {  },
-                            horizontalArrangement = Arrangement.spacedBy(20.dp, Alignment.CenterHorizontally),
+                                .clickable { },
+                            horizontalArrangement = Arrangement.spacedBy(
+                                20.dp,
+                                Alignment.CenterHorizontally
+                            ),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Icon(

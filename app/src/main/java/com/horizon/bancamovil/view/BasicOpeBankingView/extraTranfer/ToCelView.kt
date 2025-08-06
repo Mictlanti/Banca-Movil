@@ -1,4 +1,4 @@
-package com.horizon.bancamovil.view.BasicOpeBankingView.ExtraTranfer
+package com.horizon.bancamovil.view.BasicOpeBankingView.extraTranfer
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,13 +13,14 @@ import com.horizon.bancamovil.components.BasicOpeComponents.BasicOpeStyle
 import com.horizon.bancamovil.components.BasicOpeComponents.TextFieldStyle
 import com.horizon.bancamovil.components.fontStyles.BodyMedium
 import com.horizon.bancamovil.components.fontStyles.HeadLineLarge
+import com.horizon.bancamovil.viewmodel.BankingViewModel
 
 @Composable
-fun ToCelViewOne(navController: NavController) {
+fun ToCelViewOne(navController: NavController, viewModel: BankingViewModel) {
 
     val contacts = remember { mutableStateOf("") }
 
-    BasicOpeStyle(navController) {
+    BasicOpeStyle(navController, viewModel) {
         item {
             Column(
                 modifier = Modifier.fillMaxWidth(),
