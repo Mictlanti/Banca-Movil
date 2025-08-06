@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "153160062249",
+    "project_id": "bancamovil-7a349",
+    "storage_bucket": "bancamovil-7a349.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:153160062249:android:db03888250e71bf68e5338",
+        "android_client_info": {
+          "package_name": "com.horizon.bancamovil"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "153160062249-3p0a1rcjmvp1ecdugvd681ge58d5k606.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.horizon.bancamovil",
+            "certificate_hash": "0f6ac875a4151d1916bea3baa278944d2985d24c"
+          }
+        },
+        {
+          "client_id": "153160062249-jdg8vc7ctuqg5631edn3fn1rv2e3ncbk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCV0mjzAB1RQFo_QZs9gtVWtKdPLx6IA6Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "153160062249-jdg8vc7ctuqg5631edn3fn1rv2e3ncbk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

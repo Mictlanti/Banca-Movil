@@ -22,10 +22,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.horizon.bancamovil" />
+                  <option name="mobileSdkAppId" value="1:153160062249:android:db03888250e71bf68e5338" />
+                  <option name="projectId" value="bancamovil-7a349" />
+                  <option name="projectNumber" value="153160062249" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

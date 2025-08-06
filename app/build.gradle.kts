@@ -1,6 +1,10 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.google.gms.google.services)
+    id("org.jetbrains.kotlin.plugin.compose")
+    kotlin("kapt")
+    alias(libs.plugins.dagger)
 }
 
 android {
@@ -9,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId = "com.horizon.bancamovil"
-        minSdk = 22
+        minSdk = 23
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -40,7 +44,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = "1.5.14"
     }
     packaging {
         resources {
@@ -78,4 +82,26 @@ dependencies {
 
     //Icons
     implementation(libs.material.icons.extended)
+
+    //firebase
+    implementation(platform(libs.firebase.bom.v3273))
+    implementation(libs.google.firebase.auth.ktx)
+    implementation(libs.play.services.auth)
+    implementation(libs.googleid)
+
+    //coil
+    implementation(libs.coil.compose)
+
+    //Room
+    implementation(libs.room.ktx)
+    kapt(libs.room.compiler)
+
+    //dagger - hilt
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+
+    //FusedLocationProviderClient
+    implementation(libs.play.services.location)
+
+
 }
