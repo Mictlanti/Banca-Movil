@@ -43,6 +43,13 @@ Su propósito es aprender, practicar y demostrar buenas prácticas en el desarro
 
 ## 📸 Capturas de pantalla
 
+<p float="left">
+  <img src="https://github.com/user-attachments/assets/d1620e36-b4f3-41d0-afcd-168860bfa13c" width="200"/>
+  <img src="https://github.com/user-attachments/assets/520e696b-d9e2-49e4-8b3a-49ead38db110" width="200"/>
+  <img src="https://github.com/user-attachments/assets/80aa709b-62bc-4228-a7c4-d1c04d09fcf3" width="200"/>
+  <img src="https://github.com/user-attachments/assets/ae7c5827-e739-4b5d-98f6-a35dc12728de" width="200"/>
+</p>
+
 ---
 
 ## 📂 Estructura del proyecto
