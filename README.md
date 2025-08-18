@@ -51,6 +51,19 @@ Su propósito es aprender, practicar y demostrar buenas prácticas en el desarro
 </p>
 
 ---
+---
 
-## 📂 Estructura del proyecto
+## 🚀 Cómo ejecutar el proyecto
+
+1. Clonar el repositorio:
+   ```bash
+   git clone https://github.com/mictlanti.git
+   
+- Abrir en Android Studio
+
+- Sincronizar dependencias de Gradle
+
+- Configurar Firebase Authentication en el proyecto
+
+- Ejecutar en un emulador o dispositivo físico
 
