@@ -57,7 +57,7 @@ Su propósito es aprender, practicar y demostrar buenas prácticas en el desarro
 
 1. Clonar el repositorio:
    ```bash
-   git clone https://github.com/mictlanti.git
+   git clone https://github.com/Mictlanti/Banca-Movil.git
    
 - Abrir en Android Studio
 
