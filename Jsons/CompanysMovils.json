@@ -3,7 +3,7 @@
     "id": 1,
     "company": "AT&T",
     "slug": "att",
-    "logoUrl": "",
+    "logoUrl": "https://raw.githubusercontent.com/Mictlanti/Banca-Movil/refs/heads/main/images/att_logo.png",
     "denominations": [20, 50, 100, 200],
     "activationTime": "30s",
     "available": true
@@ -12,7 +12,7 @@
     "id": 2,
     "company": "Unefon",
     "slug": "unefon",
-    "logoUrl": "",
+    "logoUrl": "https://raw.githubusercontent.com/Mictlanti/Banca-Movil/refs/heads/main/images/unefon_logo.png",
     "denominations": [20, 50, 100, 200],
     "activationTime": "30s",
     "available": true
@@ -21,7 +21,34 @@
     "id": 3,
     "company": "Telcel",
     "slug": "telcel",
-    "logoUrl": "",
+    "logoUrl": "https://raw.githubusercontent.com/Mictlanti/Banca-Movil/refs/heads/main/images/telcel_logo.png",
+    "denominations": [20, 50, 100, 200],
+    "activationTime": "30s",
+    "available": true
+  },
+  {
+    "id": 4,
+    "company": "Movistar",
+    "slug": "movistar",
+    "logoUrl": "https://raw.githubusercontent.com/Mictlanti/Banca-Movil/refs/heads/main/images/movistar_logo.webp",
+    "denominations": [20, 50, 100, 200],
+    "activationTime": "30s",
+    "available": true
+  },
+  {
+    "id": 3,
+    "company": "Axios Movil",
+    "slug": "axios",
+    "logoUrl": "https://raw.githubusercontent.com/Mictlanti/Banca-Movil/refs/heads/main/images/axios_logo.png",
+    "denominations": [20, 50, 100, 200],
+    "activationTime": "30s",
+    "available": true
+  },
+  {
+    "id": 3,
+    "company": "internet del Bienestar",
+    "slug": "internet",
+    "logoUrl": "https://raw.githubusercontent.com/Mictlanti/Banca-Movil/refs/heads/main/images/internet_binestar_logo.png",
     "denominations": [20, 50, 100, 200],
     "activationTime": "30s",
     "available": true
