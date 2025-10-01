@@ -3,6 +3,7 @@
     "id": 1,
     "company": "AT&T",
     "slug": "att",
+    "logoUrl": "",
     "denominations": [20, 50, 100, 200],
     "activationTime": "30s",
     "available": true
@@ -11,6 +12,7 @@
     "id": 2,
     "company": "Unefon",
     "slug": "unefon",
+    "logoUrl": "",
     "denominations": [20, 50, 100, 200],
     "activationTime": "30s",
     "available": true
@@ -19,6 +21,7 @@
     "id": 3,
     "company": "Telcel",
     "slug": "telcel",
+    "logoUrl": "",
     "denominations": [20, 50, 100, 200],
     "activationTime": "30s",
     "available": true
