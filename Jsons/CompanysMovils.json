@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "company": "AT&T",
+    "slug": "att",
+    "denominations": [20, 50, 100, 200],
+    "activationTime": "30s",
+    "available": true
+  },
+  {
+    "id": 2,
+    "company": "Unefon",
+    "slug": "unefon",
+    "denominations": [20, 50, 100, 200],
+    "activationTime": "30s",
+    "available": true
+  },
+  {
+    "id": 3,
+    "company": "Telcel",
+    "slug": "telcel",
+    "denominations": [20, 50, 100, 200],
+    "activationTime": "30s",
+    "available": true
+  }
+]
