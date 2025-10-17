@@ -1,0 +1,26 @@
+[
+  {
+    "id" : 1,
+    "date" : "2025-10-12T14 : 23:07",
+    "description": "By beautyful",
+    "amount" : -50,
+    "balanceAfter" : 457815400,
+    "accountNumber" : 45788481165893255
+  },
+  {
+    "id": 2,
+    "date": "2025-13-14T09:45:00",
+    "description": "Depósito nómina",
+    "amount": 8450.50,
+    "balanceAfter": 8450.50,
+    "accountNumber": "6789012345"
+  },
+  {
+    "id": 3,
+    "date": "2025-21-15T14:23:00",
+    "description": "Transferencia a Juan Pérez",
+    "amount": -500.00,
+    "balanceAfter": 14730.75,
+    "accountNumber": "3456789012"
+  }
+]
