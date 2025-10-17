@@ -1,0 +1,14 @@
+[
+  {
+    "id": 101,
+    "title": "Depósito recibido",
+    "message": "Se ha acreditado $8,450.50 a tu cuenta nómina.",
+    "date": "2025-10-14T09:46:00"
+  },
+  {
+    "id": 102,
+    "title": "Nuevo inicio de sesión",
+    "message": "Detectamos un inicio de sesión desde un nuevo dispositivo.",
+    "date": "2025-10-15T07:30:00"
+  }
+]
